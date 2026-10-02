@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b2f23">
+  <meta name="description" content="Calculateur générique de progression temporelle pour projets, jalons et échéances.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="DelayCalculator">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <title>DelayCalculator</title>
+  <style>
+    :root{--deep:#061f17;--dark:#0b2f23;--main:#1f6f50;--light:#77b892;--soft:#dceee3;--pale:#f3faf5;--cream:#fbf7ed;--text:#1d261f;--muted:#5f6f65;--white:#fff;--shadow:0 18px 45px rgba(11,47,35,.16)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 10% 0%,rgba(119,184,146,.22),transparent 32%),radial-gradient(circle at 90% 30%,rgba(220,238,227,.55),transparent 34%),linear-gradient(180deg,var(--cream),var(--pale))}
+    button,input{font:inherit}.app{width:min(1180px,calc(100% - 28px));margin:auto;padding:28px 0 54px}.hero{padding:34px;border-radius:34px;color:#fff;background:linear-gradient(135deg,#061f17,#0b2f23 48%,#1f6f50);box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-90px;bottom:-120px;background:rgba(255,255,255,.08)}
+    .eyebrow{font-size:.78rem;font-weight:900;text-transform:uppercase;letter-spacing:.09em;color:#dceee3}h1{margin:12px 0 8px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2.3rem,6vw,4.6rem);line-height:.95;letter-spacing:-.05em}.hero p{margin:0;max-width:760px;color:rgba(255,255,255,.84)}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:1}
+    .btn{border:0;border-radius:999px;padding:10px 15px;font-weight:900;cursor:pointer}.primary{background:#dceee3;color:#0b2f23}.secondary{background:rgba(255,255,255,.13);color:#fff;border:1px solid rgba(255,255,255,.2)}.green{background:var(--main);color:#fff}.ghost{background:var(--soft);color:var(--dark)}.danger{background:#f7dddd;color:#7c1d1d}.hidden{display:none!important}
+    .panel{margin-top:26px;padding:28px;border-radius:30px;background:rgba(255,255,255,.9);border:1px solid rgba(11,47,35,.1);box-shadow:0 12px 30px rgba(11,47,35,.1)}.grid{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:14px;align-items:end}label{display:grid;gap:7px;font-size:.8rem;font-weight:900;color:var(--dark)}input{width:100%;border:1px solid rgba(11,47,35,.16);border-radius:15px;padding:12px 13px;background:#fff;color:var(--text);outline:none}input:focus{border-color:var(--main);box-shadow:0 0 0 3px rgba(31,111,80,.12)}
+    .projects{display:grid;gap:18px;margin-top:24px}.project{padding:24px;border-radius:28px;background:rgba(255,255,255,.92);border:1px solid rgba(11,47,35,.11);box-shadow:0 12px 28px rgba(11,47,35,.09)}.project-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.project-title{margin:0;font-size:1.45rem;color:var(--dark)}.status{padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--dark);font-size:.75rem;font-weight:900}
+    .track{height:18px;border-radius:999px;overflow:hidden;background:var(--soft);margin:18px 0 12px}.fill{height:100%;background:linear-gradient(90deg,var(--dark),var(--main),var(--light));border-radius:inherit}.dates{display:flex;justify-content:space-between;gap:14px;color:var(--muted);font-size:.8rem;font-weight:750}.meta{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:18px}.metric{padding:14px;border-radius:18px;background:var(--pale)}.metric b{display:block;font-size:1.15rem;color:var(--dark)}.metric span{font-size:.74rem;color:var(--muted);font-weight:800}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.empty{text-align:center;padding:42px 20px;color:var(--muted)}.note{margin-top:14px;color:var(--muted);font-size:.82rem}
+    @media(max-width:980px){.grid{grid-template-columns:1fr 1fr}.wide,.add{grid-column:1/-1}.meta{grid-template-columns:repeat(3,1fr)}}@media(max-width:620px){.app{width:min(100% - 18px,1180px);padding-top:12px}.hero,.panel,.project{border-radius:24px}.grid{grid-template-columns:1fr}.meta{grid-template-columns:1fr 1fr}.project-head{flex-direction:column}.dates{flex-direction:column}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <section class="hero">
+    <div class="eyebrow">Portfolio Tools</div>
+    <h1>DelayCalculator</h1>
+    <p>Ajoutez un projet, définissez sa date de début et sa date de fin, puis laissez l'application calculer automatiquement sa progression en jours, heures et pourcentage.</p>
+    <div class="toolbar">
+      <button class="btn primary hidden" id="installBtn">Installer l'application</button>
+      <button class="btn secondary" id="exportBtn">Exporter les projets</button>
+      <label class="btn secondary" style="display:inline-flex;align-items:center;cursor:pointer">Importer<input id="importInput" type="file" accept="application/json" hidden></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <form id="projectForm" class="grid">
+      <label class="wide">Nom du projet<input id="projectName" required placeholder="Ex. Manuscrit, Expérience 1, Site web..."></label>
+      <label>Date et heure de début<input id="startDate" type="datetime-local" required></label>
+      <label>Date et heure de fin<input id="endDate" type="datetime-local" required></label>
+      <button class="btn green add" type="submit">Ajouter</button>
+    </form>
+    <div class="note">Les projets sont enregistrés localement sur cet appareil. Une fois installée, la PWA peut fonctionner hors ligne.</div>
+  </section>
+
+  <section class="projects" id="projects"></section>
+</main>
+
+<script>
+const KEY="delaycalculator-projects-v1";
+let projects=load();
+let installPrompt=null;
+const els={form:document.getElementById("projectForm"),name:document.getElementById("projectName"),start:document.getElementById("startDate"),end:document.getElementById("endDate"),projects:document.getElementById("projects"),install:document.getElementById("installBtn")};
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}}
+function save(){localStorage.setItem(KEY,JSON.stringify(projects))}
+function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
+function int(v){return new Intl.NumberFormat("fr-FR",{maximumFractionDigits:0}).format(v)}
+function pct(v){return new Intl.NumberFormat("fr-FR",{minimumFractionDigits:1,maximumFractionDigits:1}).format(v)}
+function date(v){return new Intl.DateTimeFormat("fr-FR",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v))}
+function compute(p){
+  const s=new Date(p.start).getTime(),e=new Date(p.end).getTime(),n=Date.now(),total=Math.max(1,e-s),c=Math.min(Math.max(n,s),e),el=Math.max(0,c-s),rem=Math.max(0,e-c);
+  return {s,e,percent:Math.min(100,Math.max(0,el/total*100)),status:n<s?"À venir":n>=e?"Terminé":"En cours",elapsedHours:el/3600000,remainingHours:rem/3600000,totalHours:total/3600000,elapsedDays:el/86400000,remainingDays:rem/86400000,totalDays:total/86400000};
+}
+function esc(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function render(){
+  if(!projects.length){els.projects.innerHTML='<div class="panel empty">Aucun projet pour le moment. Ajoutez-en un ci-dessus.</div>';return}
+  els.projects.innerHTML=projects.map(p=>{const c=compute(p);return `
+    <article class="project">
+      <div class="project-head"><h2 class="project-title">${esc(p.name)}</h2><span class="status">${c.status}</span></div>
+      <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.percent.toFixed(1)}"><div class="fill" style="width:${c.percent.toFixed(4)}%"></div></div>
+      <div class="dates"><span>${date(c.s)}</span><strong>${pct(c.percent)} %</strong><span>${date(c.e)}</span></div>
+      <div class="meta">
+        <div class="metric"><b>${int(Math.floor(c.elapsedDays))} j</b><span>jours écoulés</span></div>
+        <div class="metric"><b>${int(Math.ceil(c.remainingDays))} j</b><span>jours restants</span></div>
+        <div class="metric"><b>${int(Math.floor(c.elapsedHours))} h</b><span>heures écoulées</span></div>
+        <div class="metric"><b>${int(Math.ceil(c.remainingHours))} h</b><span>heures restantes</span></div>
+        <div class="metric"><b>${int(Math.round(c.totalDays))} j</b><span>durée totale</span></div>
+        <div class="metric"><b>${pct(c.percent)} %</b><span>progression</span></div>
+      </div>
+      <div class="actions"><button class="btn ghost" onclick="editProject('${p.id}')">Modifier</button><button class="btn danger" onclick="deleteProject('${p.id}')">Supprimer</button></div>
+    </article>`}).join("");
+}
+function setDefaults(){
+  const now=new Date(),later=new Date(now.getTime()+7*86400000),f=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*60000);return z.toISOString().slice(0,16)};
+  els.start.value=f(now);els.end.value=f(later);
+}
+els.form.addEventListener("submit",e=>{
+  e.preventDefault();
+  const s=new Date(els.start.value),en=new Date(els.end.value);
+  if(!(s<en)){alert("La date de fin doit être postérieure à la date de début.");return}
+  projects.unshift({id:uid(),name:els.name.value.trim(),start:els.start.value,end:els.end.value});
+  save();els.name.value="";setDefaults();render();
+});
+window.deleteProject=id=>{projects=projects.filter(p=>p.id!==id);save();render()}
+window.editProject=id=>{const p=projects.find(x=>x.id===id);if(!p)return;els.name.value=p.name;els.start.value=p.start;els.end.value=p.end;projects=projects.filter(x=>x.id!==id);save();render();window.scrollTo({top:0,behavior:"smooth"})}
+document.getElementById("exportBtn").addEventListener("click",()=>{const b=new Blob([JSON.stringify(projects,null,2)],{type:"application/json"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="delaycalculator-projects.json";a.click();URL.revokeObjectURL(u)})
+document.getElementById("importInput").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d))throw 0;projects=d;save();render()}catch{alert("Fichier JSON invalide.")}e.target.value=""})
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installPrompt=e;els.install.classList.remove("hidden")})
+els.install.addEventListener("click",async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;els.install.classList.add("hidden")})
+window.addEventListener("appinstalled",()=>els.install.classList.add("hidden"))
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
+setDefaults();render();setInterval(render,60000);
+</script>
+</body>
+</html>
