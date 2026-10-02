@@ -1,38 +1,26 @@
 # DelayCalculator
 
-DelayCalculator est une application web générique de suivi de progression temporelle pour des projets, jalons et échéances.
+DelayCalculator est une application web de suivi de progression temporelle conçue pour visualiser simplement l'avancement d'un projet entre une date de début et une date de fin.
+
+L'application peut être utilisée pour suivre un projet, une échéance, une période de travail, un jalon ou tout autre intervalle temporel défini par l'utilisateur.
 
 ## Fonctionnalités
 
-- nom de projet libre
-- date et heure de début
-- date et heure de fin
-- pourcentage de progression
-- jours écoulés et jours restants
-- heures écoulées et heures restantes
-- durée totale
-- états À venir, En cours et Terminé
-- modification et suppression des projets
-- stockage local dans le navigateur
-- import et export JSON
-- installation en PWA
-- fonctionnement hors ligne via Service Worker
-- interface responsive inspirée de la DA Portfolio
+- création de projets avec un nom personnalisé ;
+- définition d'une date et d'une heure de début ;
+- définition d'une date et d'une heure de fin ;
+- calcul automatique du pourcentage de progression ;
+- affichage des jours écoulés et des jours restants ;
+- affichage des heures écoulées et des heures restantes ;
+- calcul de la durée totale du projet ;
+- indication automatique du statut du projet : À venir, En cours ou Terminé ;
+- modification et suppression des projets enregistrés ;
+- sauvegarde locale des projets dans le navigateur ;
+- import et export des projets au format JSON ;
+- utilisation possible hors connexion ;
+- installation de l'application sur un appareil compatible ;
+- interface responsive adaptée aux ordinateurs, tablettes et smartphones.
 
-Aucune donnée n'est envoyée vers un serveur.
+Les calculs sont actualisés automatiquement afin que la progression affichée reste cohérente avec le temps réellement écoulé.
 
-## Installation PWA
-
-Une fois le site servi en HTTPS, le navigateur peut proposer l'installation de l'application. Sur les navigateurs compatibles, le bouton "Installer l'application" apparaît automatiquement.
-
-## GitHub Pages
-
-Dans le dépôt GitHub :
-
-1. ouvrir Settings > Pages ;
-2. choisir Deploy from a branch ;
-3. sélectionner main ;
-4. choisir / (root) ;
-5. enregistrer.
-
-L'application sera alors disponible à l'adresse GitHub Pages du dépôt.
+Les données restent stockées localement sur l'appareil de l'utilisateur et ne sont pas envoyées vers un serveur.
