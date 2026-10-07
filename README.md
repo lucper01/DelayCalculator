@@ -10,9 +10,10 @@ L'application peut être utilisée pour suivre un projet, une échéance, une p�
 - définition d'une date et d'une heure de début ;
 - définition d'une date et d'une heure de fin ;
 - calcul automatique du pourcentage de progression ;
+- affichage des mois écoulés et des mois restants ;
 - affichage des jours écoulés et des jours restants ;
 - affichage des heures écoulées et des heures restantes ;
-- calcul de la durée totale du projet ;
+- calcul de la durée totale du projet en mois, jours et heures ;
 - indication automatique du statut du projet : À venir, En cours ou Terminé ;
 - modification et suppression des projets enregistrés ;
 - sauvegarde locale des projets dans le navigateur ;
