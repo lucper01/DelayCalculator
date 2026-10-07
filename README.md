@@ -19,6 +19,12 @@ L'application peut être utilisée pour suivre un projet, une échéance, une p�
 - sauvegarde locale des projets dans le navigateur ;
 - import et export des projets au format JSON ;
 - utilisation possible hors connexion ;
+- recherche et filtrage des projets par statut ;
+- tri des projets selon leur progression, le temps restant ou leur nom ;
+- vue confortable ou compacte ;
+- affichage synthétique du nombre de projets en cours, à venir et terminés ;
+- visualisation combinée par anneau de progression et barre temporelle ;
+- mode clair ou sombre ;
 - installation de l'application sur un appareil compatible ;
 - interface responsive adaptée aux ordinateurs, tablettes et smartphones.
 
