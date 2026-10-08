@@ -25,7 +25,7 @@
     <button class="btn secondary" id="exportBtn" type="button">Exporter JSON</button>
     <button class="btn secondary" id="csvBtn" type="button">Exporter CSV</button>
     <label class="btn secondary" style="display:inline-flex;align-items:center;cursor:pointer">Importer<input id="importInput" type="file" accept=".json,application/json" hidden></label>
-    <button class="btn secondary" id="settingsBtn" type="button">Réglages</button>
+    <button class="btn secondary" id="shareBtn" type="button">Partager</button><button class="btn secondary" id="backupBtn" type="button">Sauvegarde</button><button class="btn secondary" id="settingsBtn" type="button">Réglages</button>
   </div>
   <div class="summary">
     <div class="summary-card"><strong id="sumTotal">0</strong><span>projets</span></div>
@@ -67,7 +67,8 @@
           <label>Catégorie<select id="category"><option>Recherche</option><option>Développement</option><option>Enseignement</option><option>Administratif</option><option>Personnel</option><option>Autre</option></select></label>
           <label>Tags<input id="tags" placeholder="analyse, article, urgent"></label>
         </div>
-        <label>Progression réelle
+        <label style="display:flex;grid-template-columns:auto 1fr;align-items:center;gap:9px"><input id="trackManual" type="checkbox" style="width:18px;height:18px;min-height:auto"><span>Suivre aussi la progression réelle</span></label>
+        <label id="manualBlock" class="hidden">Progression réelle
           <div class="range-wrap"><input id="manualProgress" type="range" min="0" max="100" step="1" value="0"><span class="range-value" id="manualValue">0 %</span></div>
         </label>
         <label>Notes<textarea id="notes" placeholder="Contexte, prochaine action, informations utiles..."></textarea></label>
@@ -120,7 +121,8 @@
 </main>
 
 <div class="modal hidden" id="projectModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Détails</h2><button class="close-btn" data-close="projectModal">×</button></div><div id="modalBody"></div></div></div>
-<div class="modal hidden" id="settingsModal"><div class="modal-card"><div class="modal-head"><h2>Réglages</h2><button class="close-btn" data-close="settingsModal">×</button></div><div class="form-grid" style="margin-top:16px"><label>Thème<select id="themeSelect"><option value="light">Clair</option><option value="dark">Sombre</option><option value="mono">Noir / blanc / gris</option></select></label><label style="display:flex;grid-template-columns:auto 1fr;align-items:center;gap:9px"><input id="largeText" type="checkbox" style="width:18px;height:18px;min-height:auto"><span>Texte agrandi</span></label><label style="display:flex;grid-template-columns:auto 1fr;align-items:center;gap:9px"><input id="highContrast" type="checkbox" style="width:18px;height:18px;min-height:auto"><span>Contraste renforcé</span></label></div></div></div>
+<div class="modal hidden" id="settingsModal"><div class="modal-card"><div class="modal-head"><h2>Réglages</h2><button class="close-btn" data-close="settingsModal">×</button></div><div class="form-grid" style="margin-top:16px"><label>Thème<select id="themeSelect"><option value="light">Clair</option><option value="dark">Sombre</option><option value="mono">Noir / blanc / gris</option></select></label><label style="display:flex;grid-template-columns:auto 1fr;align-items:center;gap:9px"><input id="largeText" type="checkbox" style="width:18px;height:18px;min-height:auto"><span>Texte agrandi</span></label><label style="display:flex;grid-template-columns:auto 1fr;align-items:center;gap:9px"><input id="highContrast" type="checkbox" style="width:18px;height:18px;min-height:auto"><span>Contraste renforcé</span></label>
+<label style="display:flex;grid-template-columns:auto 1fr;align-items:center;gap:9px"><input id="notificationsToggle" type="checkbox" style="width:18px;height:18px;min-height:auto"><span>Alertes locales à moins de 24 h</span></label></div></div></div>
 <div class="toast hidden" id="toast"></div>
 <script src="app.js"></script>
 </body>
