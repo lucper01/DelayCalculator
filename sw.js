@@ -1,9 +1,11 @@
-const CACHE="delaycalculator-v7";
-const ASSETS=["./","./index.html","./app.css","./app.js","./manifest.webmanifest","./icon.svg"];
+const CACHE="delaycalculator-v8";
+const ASSETS=["./","./index.html","./manifest.webmanifest","./icon.svg"];
 
 self.addEventListener("install",event=>{
   event.waitUntil(
-    caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())
+    caches.open(CACHE)
+      .then(cache=>cache.addAll(ASSETS))
+      .then(()=>self.skipWaiting())
   );
 });
 
@@ -17,15 +19,12 @@ self.addEventListener("activate",event=>{
 
 self.addEventListener("fetch",event=>{
   if(event.request.method!=="GET") return;
-  const url=new URL(event.request.url);
-  const isCore =
-    event.request.mode==="navigate" ||
-    url.pathname.endsWith("/") ||
-    url.pathname.endsWith("/index.html") ||
-    url.pathname.endsWith("/app.js") ||
-    url.pathname.endsWith("/app.css");
 
-  if(isCore){
+  const requestUrl=new URL(event.request.url);
+  const isNavigation=event.request.mode==="navigate";
+  const isIndex=requestUrl.pathname.endsWith("/") || requestUrl.pathname.endsWith("/index.html");
+
+  if(isNavigation || isIndex){
     event.respondWith(
       fetch(event.request)
         .then(response=>{
