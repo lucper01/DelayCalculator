@@ -1,4 +1,4 @@
-const CACHE="delaycalculator-v4";
+const CACHE="delaycalculator-v5";
 const ASSETS=["./","./index.html","./app.css","./app.js","./manifest.webmanifest","./icon.svg"];
 
 self.addEventListener("install",event=>{
