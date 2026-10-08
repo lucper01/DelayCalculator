@@ -187,10 +187,41 @@
 </main>
 
 <script>
-const KEY="delaycalculator-projects-v1";
+const KEY="delaycalculator-projects-v3";
+const LEGACY_KEYS=["delaycalculator-projects-v2","delaycalculator-projects-v1"];
 const SETTINGS_KEY="delaycalculator-settings-v1";
 const MONTH_MS=365.2425/12*86400000;
-let projects=loadProjects();
+
+function normalizeProject(p){
+  if(!p||typeof p!=="object") return null;
+  const start=p.start||p.startDate;
+  const end=p.end||p.endDate;
+  if(!start||!end||Number.isNaN(new Date(start).getTime())||Number.isNaN(new Date(end).getTime())) return null;
+  return {
+    id:p.id||uid(),
+    name:String(p.name||"Projet"),
+    start,
+    end,
+    createdAt:p.createdAt||Date.now()
+  };
+}
+function readProjectStore(){
+  const candidates=[KEY,...LEGACY_KEYS];
+  for(const key of candidates){
+    try{
+      const raw=localStorage.getItem(key);
+      if(!raw) continue;
+      const parsed=JSON.parse(raw);
+      const source=Array.isArray(parsed)?parsed:(Array.isArray(parsed?.projects)?parsed.projects:null);
+      if(!source) continue;
+      const cleaned=source.map(normalizeProject).filter(Boolean);
+      localStorage.setItem(KEY,JSON.stringify(cleaned));
+      return cleaned;
+    }catch{}
+  }
+  return [];
+}
+let projects=readProjectStore();
 let editingId=null;
 let installPrompt=null;
 let filter="all";
@@ -203,8 +234,15 @@ const els={
   editor:$("editorPanel"),submit:$("submitBtn"),cancel:$("cancelEditBtn"),formTitle:$("formTitle")
 };
 
-function loadProjects(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}}
-function saveProjects(){localStorage.setItem(KEY,JSON.stringify(projects))}
+function loadProjects(){return readProjectStore()}
+function saveProjects(){
+  try{
+    localStorage.setItem(KEY,JSON.stringify(projects.map(normalizeProject).filter(Boolean)));
+  }catch(err){
+    console.error("DelayCalculator storage error",err);
+    alert("Impossible d'enregistrer localement ce projet sur cet appareil.");
+  }
+}
 function loadSettings(){try{return JSON.parse(localStorage.getItem(SETTINGS_KEY))||{}}catch{return{}}}
 function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify({theme:document.body.classList.contains("dark")?"dark":"light",density}))}
 function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
