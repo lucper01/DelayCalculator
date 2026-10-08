@@ -45,3 +45,57 @@ $("exportBtn").addEventListener("click",()=>{const blob=new Blob([JSON.stringify
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installPrompt=e;els.install.classList.remove("hidden")});els.install.addEventListener("click",async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;els.install.classList.add("hidden")});
 if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
 renderColors();setDefaults();renderAll();setInterval(renderAll,60000);
+
+/* Extended PWA and productivity helpers */
+function exportBackup(){
+  const payload={schema:"delaycalculator",version:2,exportedAt:new Date().toISOString(),projects,trash,templates,settings:load(SETTINGS_KEY,{})};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="delaycalculator-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(u)
+}
+function shareApp(){
+  const data={title:"DelayCalculator",text:"Suivi temporel de projets",url:location.origin+location.pathname};
+  if(navigator.share) navigator.share(data).catch(()=>{});
+  else navigator.clipboard?.writeText(data.url).then(()=>showToast("Lien copié")).catch(()=>prompt("Copiez ce lien :",data.url))
+}
+function shareProject(id){
+  const p=projects.find(x=>x.id===id);if(!p)return;
+  const data=btoa(unescape(encodeURIComponent(JSON.stringify({name:p.name,start:p.start,end:p.end,category:p.category,tags:p.tags,color:p.color}))));
+  const url=location.origin+location.pathname+"?project="+encodeURIComponent(data);
+  navigator.clipboard?.writeText(url).then(()=>showToast("Lien projet copié")).catch(()=>prompt("Copiez ce lien :",url))
+}
+function importSharedProject(){
+  const q=new URLSearchParams(location.search).get("project");if(!q)return;
+  try{
+    const d=JSON.parse(decodeURIComponent(escape(atob(q))));
+    projects.unshift(migrateProject({...d,id:uid(),createdAt:Date.now()}));saveAll();history.replaceState(null,"",location.pathname);showToast("Projet partagé importé")
+  }catch{}
+}
+function focusProject(id){
+  switchView("projects");
+  document.querySelectorAll(".project").forEach(card=>card.classList.toggle("hidden",card.dataset.id!==id));
+  showToast("Mode focus · Échap pour quitter")
+}
+function leaveFocus(){document.querySelectorAll(".project").forEach(card=>card.classList.remove("hidden"))}
+function requestNotifications(){
+  if(!("Notification" in window)){showToast("Notifications non prises en charge");return}
+  Notification.requestPermission().then(p=>showToast(p==="granted"?"Notifications activées":"Notifications non autorisées"))
+}
+function notifySoon(){
+  if(!("Notification" in window)||Notification.permission!=="granted")return;
+  const now=Date.now();
+  projects.filter(p=>!p.archived).forEach(p=>{
+    const c=compute(p);
+    if(c.remaining>0&&c.remaining<=86400000&&(!p.lastNotified||now-p.lastNotified>12*3600000)){
+      new Notification("DelayCalculator",{body:p.name+" arrive à échéance dans moins de 24 h."});
+      p.lastNotified=now;
+    }
+  });
+  saveAll();
+}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){leaveFocus();document.querySelectorAll(".modal").forEach(x=>x.classList.add("hidden"))}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();switchView("projects");els.search.focus()}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="n"){e.preventDefault();switchView("projects");els.name.focus()}
+});
+importSharedProject();
+setInterval(notifySoon,15*60*1000);
