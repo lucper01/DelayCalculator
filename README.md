@@ -1,33 +1,34 @@
 # DelayCalculator
 
-DelayCalculator est une application web de suivi de progression temporelle conçue pour visualiser simplement l'avancement d'un projet entre une date de début et une date de fin.
-
-L'application peut être utilisée pour suivre un projet, une échéance, une période de travail, un jalon ou tout autre intervalle temporel défini par l'utilisateur.
+DelayCalculator est une application web et PWA de suivi temporel de projets. Elle permet de visualiser la progression d'un projet entre une date de début et une date de fin, tout en ajoutant des informations de pilotage facultatives.
 
 ## Fonctionnalités
 
-- création de projets avec un nom personnalisé ;
-- définition d'une date et d'une heure de début ;
-- définition d'une date et d'une heure de fin ;
-- calcul automatique du pourcentage de progression ;
-- affichage des mois écoulés et des mois restants ;
-- affichage des jours écoulés et des jours restants ;
-- affichage des heures écoulées et des heures restantes ;
-- calcul de la durée totale du projet en mois, jours et heures ;
-- indication automatique du statut du projet : À venir, En cours ou Terminé ;
-- modification et suppression des projets enregistrés ;
-- sauvegarde locale des projets dans le navigateur ;
-- import et export des projets au format JSON ;
-- utilisation possible hors connexion ;
-- recherche et filtrage des projets par statut ;
-- tri des projets selon leur progression, le temps restant ou leur nom ;
-- vue confortable ou compacte ;
-- affichage synthétique du nombre de projets en cours, à venir et terminés ;
-- visualisation combinée par anneau de progression et barre temporelle ;
-- mode clair ou sombre ;
-- installation de l'application sur un appareil compatible ;
+- création de projets avec un nom, une date et une heure de début, et une date et une heure de fin ;
+- calcul automatique de la progression temporelle ;
+- affichage des mois, jours et heures écoulés et restants ;
+- pourcentage de progression et durée totale ;
+- états À venir, En cours et Terminé ;
+- progression réelle optionnelle pour comparer l'avancement du travail au temps écoulé ;
+- indication de l'avance ou du retard par rapport au planning ;
+- catégories, tags, notes, liens associés, couleurs et projets épinglés ;
+- jalons intermédiaires avec validation ;
+- recherche, filtres et tris ;
+- vue Aujourd'hui pour les projets actifs et les échéances proches ;
+- vue Timeline de type Gantt ;
+- vue de charge mensuelle ;
+- analyses de progression, écarts au planning, catégories et chevauchements ;
+- duplication de projets et création de modèles réutilisables ;
+- archivage, corbeille et restauration ;
+- export JSON complet, sauvegarde versionnée et export CSV ;
+- import de sauvegardes ;
+- partage de l'application et partage d'un projet par lien ;
+- mode focus pour consulter un projet isolément ;
+- thèmes clair, sombre et noir/blanc/gris ;
+- options d'accessibilité avec texte agrandi et contraste renforcé ;
+- raccourcis clavier pour la recherche et la création de projets ;
+- alertes locales optionnelles pour les échéances proches lorsque le navigateur les autorise ;
+- installation en PWA et fonctionnement hors ligne ;
 - interface responsive adaptée aux ordinateurs, tablettes et smartphones.
 
-Les calculs sont actualisés automatiquement afin que la progression affichée reste cohérente avec le temps réellement écoulé.
-
-Les données restent stockées localement sur l'appareil de l'utilisateur et ne sont pas envoyées vers un serveur.
+Les données sont stockées localement dans le navigateur et ne sont pas envoyées vers un serveur. Les sauvegardes et exports permettent de transférer ou conserver les projets.
