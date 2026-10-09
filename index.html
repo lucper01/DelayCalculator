@@ -118,6 +118,19 @@
       .controlbar{padding:11px}.segmented{max-width:100%}
     }
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  
+    .upcoming-project{border-style:dashed;background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(243,250,245,.94))}
+    body.dark .upcoming-project{background:linear-gradient(180deg,rgba(16,37,28,.96),rgba(13,33,25,.96))}
+    .upcoming-countdown{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:10px;margin-top:18px}
+    .countdown-hero{padding:18px;border-radius:20px;background:var(--dark);color:#fff}
+    .countdown-hero strong{display:block;font-size:clamp(1.5rem,3vw,2.35rem);line-height:1}
+    .countdown-hero span{display:block;margin-top:7px;font-size:.75rem;font-weight:800;opacity:.8}
+    .countdown-part{padding:15px;border-radius:18px;background:var(--pale);border:1px solid var(--line)}
+    .countdown-part b{display:block;color:var(--dark);font-size:1.15rem}
+    .countdown-part span{display:block;margin-top:4px;color:var(--muted);font-size:.7rem;font-weight:800}
+    .upcoming-strip{margin-top:12px;padding:11px 13px;border-radius:14px;background:var(--soft);color:var(--dark);font-size:.78rem;font-weight:800}
+    @media(max-width:620px){.upcoming-countdown{grid-template-columns:1fr 1fr}.countdown-hero{grid-column:1/-1}}
+
   </style>
 </head>
 <body>
@@ -287,6 +300,25 @@ function elapsedBreakdown(ms){
   const days=Math.floor(remHours/24);
   const hours=remHours-days*24;
   return [months?months+" mois":null,days?days+" jour"+(days>1?"s":""):null,hours+" h"].filter(Boolean).join(", ");
+}
+
+
+function countdownParts(ms){
+  const safe=Math.max(0,ms);
+  const totalHours=Math.floor(safe/3600000);
+  const months=Math.floor(totalHours/(24*365.2425/12));
+  const afterMonths=totalHours-Math.floor(months*(24*365.2425/12));
+  const days=Math.floor(afterMonths/24);
+  const hours=afterMonths-days*24;
+  const totalDays=safe/86400000;
+  return {months,days,hours,totalDays,totalHours};
+}
+function countdownText(ms){
+  const x=countdownParts(ms),parts=[];
+  if(x.months) parts.push(x.months+" mois");
+  if(x.days||x.months) parts.push(x.days+" jour"+(x.days>1?"s":""));
+  parts.push(x.hours+" h");
+  return parts.join(", ");
 }
 
 function setDefaults(){
